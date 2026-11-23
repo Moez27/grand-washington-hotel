@@ -4,6 +4,8 @@ Projet du module **Développement d'applications sécurisées** — thème **Hô
 
 **Étudiante 1 :** Erij Yacoubi — classe **ING-4-SSIR-B**
 
+📄 Rapport de projet : [PDF](docs/Rapport-Grand-Washington-Hotel.pdf) · [Word](docs/Rapport-Grand-Washington-Hotel.docx)
+
 Application Symfony permettant aux clients de **rechercher, réserver et gérer des séjours** dans un hôtel 5★ à Hammamet, et aux administrateurs de **gérer tout le site** depuis un back-office avec statistiques.
 
 ---
