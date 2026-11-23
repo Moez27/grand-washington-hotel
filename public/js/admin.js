@@ -1,4 +1,4 @@
-/* Symphonie — Back-office (aucun script inline : compatible CSP) */
+/* Grand Washington — Back-office (aucun script inline : compatible CSP) */
 (function () {
     'use strict';
 

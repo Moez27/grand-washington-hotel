@@ -88,7 +88,7 @@ class Reservation
     {
         $this->extras = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
-        $this->reference = 'SYM-'.strtoupper(bin2hex(random_bytes(4)));
+        $this->reference = 'GW-'.strtoupper(bin2hex(random_bytes(4)));
     }
 
     public function getId(): ?int { return $this->id; }

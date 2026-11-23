@@ -1,6 +1,8 @@
-# 🎼 Symphonie Hotel & Spa — Réservation hôtelière (Symfony 7.4)
+# 🏛️ Grand Washington Hotel & Spa — Réservation hôtelière (Symfony 7.4)
 
 Projet du module **Développement d'applications sécurisées** — thème **Hôtel** (équipe de 2).
+
+**Étudiante 1 :** Erij Yacoubi — classe **ING-4-SSIR-B**
 
 Application Symfony permettant aux clients de **rechercher, réserver et gérer des séjours** dans un hôtel 5★ à Hammamet, et aux administrateurs de **gérer tout le site** depuis un back-office avec statistiques.
 
@@ -33,7 +35,7 @@ User 1──* Reservation *──1 Room *──1 Category
 ```
 
 - **Room** : nom, slug, description, prix/nuit, capacité, surface, literie, photo, en ligne, mise en avant
-- **Reservation** : référence unique `SYM-XXXXXXXX`, dates, voyageurs, services, total recalculé, statut (en attente / confirmée / terminée / annulée)
+- **Reservation** : référence unique `GW-XXXXXXXX`, dates, voyageurs, services, total recalculé, statut (en attente / confirmée / terminée / annulée)
 - **Review** : note 1–5 + commentaire, modéré par l'admin, réservé aux clients ayant séjourné
 
 ## 🔐 Sécurité (point clé du module)
@@ -70,8 +72,8 @@ Ouvrir http://127.0.0.1:8000
 
 | Rôle | E-mail | Mot de passe |
 |---|---|---|
-| Administrateur | `admin@symphonie.tn` | `Admin123!` |
-| Client | `client@symphonie.tn` | `Client123!` |
+| Administrateur | `admin@grandwashington.tn` | `Admin123!` |
+| Client | `client@grandwashington.tn` | `Client123!` |
 
 ### Mode production (pour la démo)
 
@@ -84,12 +86,15 @@ APP_DEBUG=0
 
 puis `php bin/console cache:clear`. (Après chaque modification du code en prod, refaire `cache:clear`.)
 
+> Les fixtures sont un outil de développement : en mode prod, les recharger avec
+> `php bin/console doctrine:fixtures:load -n --env=dev`.
+
 ### MySQL (XAMPP / WAMP) au lieu de SQLite
 
 Dans `.env.local` :
 
 ```
-DATABASE_URL="mysql://root:@127.0.0.1:3306/symphonie_hotel?serverVersion=8.0.32&charset=utf8mb4"
+DATABASE_URL="mysql://root:@127.0.0.1:3306/grand_washington?serverVersion=8.0.32&charset=utf8mb4"
 ```
 
 puis `php bin/console doctrine:database:create`, `doctrine:migrations:migrate` et `doctrine:fixtures:load`.
@@ -117,7 +122,7 @@ Répartition proposée pour la soutenance :
 
 | Membre | Partie présentée |
 |---|---|
-| Membre 1 | **Site client** : recherche, fiche chambre, panier, compte client, inscription/connexion, sécurité (CSRF, Voter, CSP) |
+| Erij Yacoubi | **Site client** : recherche, fiche chambre, panier, compte client, inscription/connexion, sécurité (CSRF, Voter, CSP) |
 | Membre 2 | **Back-office** : CRUD chambres/catégories/équipements/services, upload, réservations, clients, avis, statistiques |
 
 ## 📁 Structure

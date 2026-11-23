@@ -101,7 +101,7 @@ class AccountController extends AbstractController
         ]);
     }
 
-    #[Route('/reservations/{reference}', name: 'app_account_reservation_show', methods: ['GET'], requirements: ['reference' => 'SYM-[A-F0-9]{8}'])]
+    #[Route('/reservations/{reference}', name: 'app_account_reservation_show', methods: ['GET'], requirements: ['reference' => 'GW-[A-F0-9]{8}'])]
     public function show(#[MapEntity(mapping: ['reference' => 'reference'])] Reservation $reservation): Response
     {
         // Voter : 403 si la réservation n'appartient pas à l'utilisateur connecté
@@ -110,7 +110,7 @@ class AccountController extends AbstractController
         return $this->render('account/reservation_show.html.twig', ['reservation' => $reservation]);
     }
 
-    #[Route('/reservations/{reference}/annuler', name: 'app_account_reservation_cancel', methods: ['POST'], requirements: ['reference' => 'SYM-[A-F0-9]{8}'])]
+    #[Route('/reservations/{reference}/annuler', name: 'app_account_reservation_cancel', methods: ['POST'], requirements: ['reference' => 'GW-[A-F0-9]{8}'])]
     public function cancel(#[MapEntity(mapping: ['reference' => 'reference'])] Reservation $reservation, Request $request, EntityManagerInterface $em): Response
     {
         if (!$this->isCsrfTokenValid('cancel-'.$reservation->getReference(), (string) $request->request->get('_token'))) {

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Séjours d'exception en Méditerranée{% endblock %} · {{ hotel_name }}</title>
-    <meta name="description" content="{% block meta_description %}Symphonie Hotel & Spa, Hammamet : chambres et suites face à la mer, spa & hammam, réservation en ligne sécurisée.{% endblock %}">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23c8a165%22/><text x=%2232%22 y=%2244%22 font-size=%2234%22 text-anchor=%22middle%22 font-family=%22Georgia%22 fill=%22%230e1c2b%22>S</text></svg>">
+    <meta name="description" content="{% block meta_description %}Grand Washington Hotel & Spa, Hammamet : chambres et suites face à la mer, spa & hammam, réservation en ligne sécurisée.{% endblock %}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23c8a165%22/><text x=%2232%22 y=%2244%22 font-size=%2234%22 text-anchor=%22middle%22 font-family=%22Georgia%22 fill=%22%230e1c2b%22>W</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
@@ -21,8 +21,8 @@
     <nav class="navbar navbar-expand-xl site-nav fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{{ path('app_home') }}">
-                <span class="brand-mark"><i class="bi bi-music-note-beamed"></i></span>
-                <span>Symphonie<small>Hotel &amp; Spa</small></span>
+                <span class="brand-mark"><i class="bi bi-building"></i></span>
+                <span>Grand Washington<small>Hotel &amp; Spa</small></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
                 <span class="navbar-toggler-icon"></span>
@@ -80,7 +80,7 @@
             <div class="row g-5">
                 <div class="col-lg-4">
                     <a class="navbar-brand d-flex align-items-center gap-2 text-white fs-4 mb-3 text-decoration-none" href="{{ path('app_home') }}">
-                        <span class="brand-mark"><i class="bi bi-music-note-beamed"></i></span> Symphonie
+                        <span class="brand-mark"><i class="bi bi-building"></i></span> Grand Washington
                     </a>
                     <p>Un hôtel 5 étoiles les pieds dans l'eau, où l'art de vivre méditerranéen rencontre l'hospitalité tunisienne.</p>
                     <div class="social mt-3">
@@ -110,13 +110,13 @@
                     <ul class="list-unstyled d-grid gap-2">
                         <li><i class="bi bi-geo-alt text-gold me-2"></i>Avenue de la Corniche, 8050 Hammamet, Tunisie</li>
                         <li><i class="bi bi-telephone text-gold me-2"></i>+216 72 000 000</li>
-                        <li><i class="bi bi-envelope text-gold me-2"></i>reservation@symphonie.tn</li>
+                        <li><i class="bi bi-envelope text-gold me-2"></i>reservation@grandwashington.tn</li>
                         <li><i class="bi bi-clock text-gold me-2"></i>Réception ouverte 24 h/24</li>
                     </ul>
                 </div>
             </div>
             <div class="bottom d-flex flex-column flex-md-row justify-content-between gap-2">
-                <span>&copy; {{ 'now'|date('Y') }} {{ hotel_name }} — Projet Symfony · Développement d'applications sécurisées</span>
+                <span>&copy; {{ 'now'|date('Y') }} {{ hotel_name }} — Projet Symfony · Développement d'applications sécurisées · Erij Yacoubi (ING-4-SSIR-B)</span>
                 <span><i class="bi bi-shield-lock text-gold me-1"></i>Protection CSRF · XSS · Injection SQL</span>
             </div>
         </div>

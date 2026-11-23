@@ -1,4 +1,4 @@
-/* Symphonie Hotel & Spa — scripts du site client (aucun script inline : compatible CSP) */
+/* Grand Washington Hotel & Spa — scripts du site client (aucun script inline : compatible CSP) */
 (function () {
     'use strict';
 

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
-    <title>{% block title %}Tableau de bord{% endblock %} · Admin Symphonie</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%230e1c2b%22/><text x=%2232%22 y=%2244%22 font-size=%2234%22 text-anchor=%22middle%22 font-family=%22Georgia%22 fill=%22%23c8a165%22>S</text></svg>">
+    <title>{% block title %}Tableau de bord{% endblock %} · Admin Grand Washington</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%230e1c2b%22/><text x=%2232%22 y=%2244%22 font-size=%2234%22 text-anchor=%22middle%22 font-family=%22Georgia%22 fill=%22%23c8a165%22>W</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -19,8 +19,8 @@
 {% set pendingReviews = admin_pending_reviews() %}
 <aside class="sidebar">
     <a class="brand" href="{{ path('admin_dashboard') }}">
-        <span class="brand-mark"><i class="bi bi-music-note-beamed"></i></span>
-        <span>Symphonie<small>Back-office</small></span>
+        <span class="brand-mark"><i class="bi bi-building"></i></span>
+        <span>Grand Washington<small>Back-office</small></span>
     </a>
     <nav class="nav flex-column">
         <a class="nav-link {{ route == 'admin_dashboard' ? 'active' }}" href="{{ path('admin_dashboard') }}"><i class="bi bi-speedometer2"></i>Tableau de bord</a>

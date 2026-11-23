@@ -2,7 +2,7 @@ twig:
     file_name_pattern: '*.twig'
     form_themes: ['bootstrap_5_layout.html.twig']
     globals:
-        hotel_name: 'Symphonie Hotel & Spa'
+        hotel_name: 'Grand Washington Hotel & Spa'
 
 when@test:
     twig:

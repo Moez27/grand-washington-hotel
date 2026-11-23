@@ -22,8 +22,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
  *   php bin/console doctrine:fixtures:load
  *
  * Comptes :
- *   admin@symphonie.tn  / Admin123!
- *   client@symphonie.tn / Client123!
+ *   admin@grandwashington.tn  / Admin123!
+ *   client@grandwashington.tn / Client123!
  */
 class AppFixtures extends Fixture
 {
@@ -92,7 +92,7 @@ class AppFixtures extends Fixture
             ['Deluxe Panorama', 'Deluxe', 360, 3, 42, '1 lit King size + canapé-lit', false, ['Wi-Fi haut débit', 'Climatisation', 'Smart TV', 'Vue mer', 'Balcon privé', 'Coffre-fort', 'Baignoire', 'Espace bureau']],
             ['Suite Junior Médina', 'Suite', 450, 3, 55, '1 lit King size + salon', false, ['Wi-Fi haut débit', 'Climatisation', 'Smart TV', 'Balcon privé', 'Minibar', 'Coffre-fort', 'Baignoire', 'Machine à café']],
             ['Suite Carthage', 'Suite', 620, 4, 75, '1 lit King size + 2 lits simples', true, ['Wi-Fi haut débit', 'Climatisation', 'Smart TV', 'Vue mer', 'Balcon privé', 'Minibar', 'Coffre-fort', 'Baignoire', 'Machine à café', 'Espace bureau']],
-            ['Suite Royale Symphonie', 'Suite', 980, 4, 110, '1 lit Emperor + chambre d\'amis', true, ['Wi-Fi haut débit', 'Climatisation', 'Smart TV', 'Vue mer', 'Balcon privé', 'Minibar', 'Coffre-fort', 'Baignoire', 'Machine à café', 'Espace bureau']],
+            ['Suite Présidentielle Washington', 'Suite', 980, 4, 110, '1 lit Emperor + chambre d\'amis', true, ['Wi-Fi haut débit', 'Climatisation', 'Smart TV', 'Vue mer', 'Balcon privé', 'Minibar', 'Coffre-fort', 'Baignoire', 'Machine à café', 'Espace bureau']],
             ['Familiale Oasis', 'Familiale', 390, 5, 58, '1 lit Queen size + 3 lits simples', true, ['Wi-Fi haut débit', 'Climatisation', 'Smart TV', 'Balcon privé', 'Minibar', 'Coffre-fort']],
             ['Familiale Lagune', 'Familiale', 420, 6, 64, '2 lits Queen size + 2 lits superposés', false, ['Wi-Fi haut débit', 'Climatisation', 'Smart TV', 'Vue mer', 'Coffre-fort', 'Baignoire']],
         ];
@@ -144,13 +144,13 @@ class AppFixtures extends Fixture
         }
 
         // ---------- Utilisateurs ----------
-        $admin = (new User())->setEmail('admin@symphonie.tn')->setFirstName('Erij')->setLastName('Admin')
+        $admin = (new User())->setEmail('admin@grandwashington.tn')->setFirstName('Erij')->setLastName('Admin')
             ->setPhone('+216 71 000 000')->setRoles(['ROLE_ADMIN'])
             ->setCreatedAt(new \DateTimeImmutable('-1 year'));
         $admin->setPassword($this->hasher->hashPassword($admin, 'Admin123!'));
         $manager->persist($admin);
 
-        $demo = (new User())->setEmail('client@symphonie.tn')->setFirstName('Yasmine')->setLastName('Ben Salah')
+        $demo = (new User())->setEmail('client@grandwashington.tn')->setFirstName('Yasmine')->setLastName('Ben Salah')
             ->setPhone('+216 22 345 678')->setCreatedAt(new \DateTimeImmutable('-8 months'));
         $demo->setPassword($this->hasher->hashPassword($demo, 'Client123!'));
         $manager->persist($demo);
