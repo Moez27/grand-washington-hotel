@@ -1,0 +1,40 @@
+{% extends 'account/_layout.html.twig' %}
+{% import '_partials/_macros.html.twig' as m %}
+
+{% block title %}Mon compte{% endblock %}
+
+{% block account_content %}
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3"><div class="stat-mini"><strong>{{ stats.total }}</strong><span>réservations</span></div></div>
+    <div class="col-6 col-md-3"><div class="stat-mini"><strong>{{ stats.upcoming }}</strong><span>à venir</span></div></div>
+    <div class="col-6 col-md-3"><div class="stat-mini"><strong>{{ stats.nights }}</strong><span>nuits passées</span></div></div>
+    <div class="col-6 col-md-3"><div class="stat-mini"><strong>{{ stats.spent|number_format(0, ',', ' ') }}</strong><span>DT dépensés</span></div></div>
+</div>
+
+<div class="panel mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h5 mb-0">Prochains séjours</h2>
+        <a href="{{ path('app_account_reservations') }}" class="small">Tout voir</a>
+    </div>
+    {% for r in upcoming %}
+        {% include 'account/_resa_card.html.twig' %}
+    {% else %}
+        <div class="empty-state py-4">
+            <i class="bi bi-suitcase2"></i>
+            <p class="mt-2 text-muted-2">Aucun séjour prévu pour le moment.</p>
+            <a href="{{ path('app_room_index') }}" class="btn btn-gold btn-sm">Réserver une chambre</a>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="panel">
+    <h2 class="h5 mb-3">Mes informations</h2>
+    <dl class="row mb-0">
+        <dt class="col-sm-4 text-muted-2 fw-normal">Nom complet</dt><dd class="col-sm-8">{{ app.user.fullName }}</dd>
+        <dt class="col-sm-4 text-muted-2 fw-normal">E-mail</dt><dd class="col-sm-8">{{ app.user.email }}</dd>
+        <dt class="col-sm-4 text-muted-2 fw-normal">Téléphone</dt><dd class="col-sm-8">{{ app.user.phone ?: '—' }}</dd>
+        <dt class="col-sm-4 text-muted-2 fw-normal">Membre depuis</dt><dd class="col-sm-8">{{ app.user.createdAt|format_date('long', locale: 'fr') }}</dd>
+    </dl>
+    <a href="{{ path('app_account_profile') }}" class="btn btn-outline-gold btn-sm mt-3"><i class="bi bi-pencil me-1"></i>Modifier</a>
+</div>
+{% endblock %}

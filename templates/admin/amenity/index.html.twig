@@ -1,0 +1,27 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Équipements{% endblock %}
+
+{% block body %}
+{% include 'admin/_page_header.html.twig' with {title: 'Équipements', subtitle: 'Les équipements sont affichés sur les fiches chambres et servent de filtre de recherche.', new_path: path('admin_amenity_new'), new_label: 'Nouvel équipement'} %}
+<div class="card-x">
+    <div class="table-responsive">
+        <table class="table table-x">
+            <thead><tr><th style="width:60px">Icône</th><th>Nom</th><th>Chambres équipées</th><th class="text-end">Actions</th></tr></thead>
+            <tbody>
+            {% for a in amenities %}
+                <tr>
+                    <td><span class="icon-preview"><i class="bi {{ a.icon }}"></i></span></td>
+                    <td class="fw-semibold">{{ a.name }}<div class="small text-muted"><code>{{ a.icon }}</code></div></td>
+                    <td>{{ a.rooms|length }}</td>
+                    <td class="text-end text-nowrap">
+                        <a href="{{ path('admin_amenity_edit', {id: a.id}) }}" class="btn btn-light btn-icon"><i class="bi bi-pencil"></i></a>
+                        {% include 'admin/_delete_form.html.twig' with {action: path('admin_amenity_delete', {id: a.id}), id: a.id} %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

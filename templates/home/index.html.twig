@@ -1,0 +1,165 @@
+{% extends 'base.html.twig' %}
+{% import '_partials/_macros.html.twig' as m %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-arches" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+    <div class="container position-relative">
+        <div class="row">
+            <div class="col-lg-7">
+                <span class="eyebrow">Hammamet · Tunisie · 5 étoiles</span>
+                <h1 class="mb-4">L'art de vivre <em>méditerranéen</em>, en parfaite harmonie.</h1>
+                <p class="lead mb-4">Chambres et suites face à la mer, hammam traditionnel et gastronomie raffinée. Réservez votre séjour en quelques clics, en toute sécurité.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{{ path('app_room_index') }}" class="btn btn-gold btn-lg">Voir les chambres <i class="bi bi-arrow-right ms-1"></i></a>
+                    <a href="{{ path('app_services') }}" class="btn btn-ghost-light btn-lg">Spa &amp; services</a>
+                </div>
+                <div class="hero-stats">
+                    <div><strong>{{ roomCount }}</strong><span>chambres &amp; suites</span></div>
+                    <div><strong>{{ average ?? '4.8' }}<small class="fs-6">/5</small></strong><span>note de nos clients</span></div>
+                    <div><strong>24/7</strong><span>conciergerie</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container hero-search-wrap">
+    <div class="search-card">
+        {{ form_start(search, {attr: {class: 'row g-2 align-items-end', novalidate: 'novalidate'}}) }}
+            <div class="col-6 col-lg-3">{{ form_row(search.checkIn, {row_attr: {class: 'mb-0'}}) }}</div>
+            <div class="col-6 col-lg-3">{{ form_row(search.checkOut, {row_attr: {class: 'mb-0'}}) }}</div>
+            <div class="col-6 col-lg-2">{{ form_row(search.guests, {row_attr: {class: 'mb-0'}, attr: {placeholder: '2'}}) }}</div>
+            <div class="col-6 col-lg-2">{{ form_row(search.category, {row_attr: {class: 'mb-0'}}) }}</div>
+            <div class="col-12 col-lg-2 d-grid">
+                <button class="btn btn-navy py-3"><i class="bi bi-search me-2"></i>Rechercher</button>
+            </div>
+        {{ form_end(search, {render_rest: false}) }}
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-3">
+            <div>
+                <span class="eyebrow">Nos hébergements</span>
+                <h2 class="section-title">Chambres &amp; suites d'exception</h2>
+                <p class="section-lead mb-0">Chaque chambre a été pensée comme une partition : lumière, matières et vue sur la Méditerranée.</p>
+            </div>
+            <a href="{{ path('app_room_index') }}" class="btn btn-outline-gold">Toutes les chambres</a>
+        </div>
+        <div class="row g-4">
+            {% for room in featured %}
+                <div class="col-md-6 col-lg-4 reveal">{% include '_partials/_room_card.html.twig' %}</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section bg-sand">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="eyebrow">Catégories</span>
+            <h2 class="section-title">Trouvez l'espace qui vous ressemble</h2>
+        </div>
+        <div class="row g-4">
+            {% for row in categories %}
+                {% set cat = row[0] %}
+                <div class="col-sm-6 col-lg reveal">
+                    <a class="cat-tile" href="{{ path('app_room_index', {category: cat.slug}) }}">
+                        <div class="icon"><i class="bi {{ cat.icon }}"></i></div>
+                        <h3 class="h5 mb-1">{{ cat.name }}</h3>
+                        <p class="small text-muted-2 mb-3">{{ cat.description|u.truncate(80, '…') }}</p>
+                        <div class="small fw-semibold">{{ row.roomCount }} chambre{{ row.roomCount > 1 ? 's' }}
+                            {% if row.minPrice %}<span class="text-gold">· dès {{ m.price(row.minPrice) }}</span>{% endif %}</div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-5 reveal">
+                <span class="eyebrow">Pourquoi Symphonie</span>
+                <h2 class="section-title">Une expérience pensée dans les moindres détails</h2>
+                <p class="section-lead mb-4">Depuis la réservation jusqu'au départ, notre équipe orchestre chaque instant de votre séjour.</p>
+                <div class="d-grid gap-4">
+                    <div class="feature"><div class="icon"><i class="bi bi-water"></i></div><div><h3 class="h6 mb-1">Plage privée</h3><p class="small text-muted-2 mb-0">Transats, parasols et service de boissons directement sur le sable fin.</p></div></div>
+                    <div class="feature"><div class="icon"><i class="bi bi-droplet-half"></i></div><div><h3 class="h6 mb-1">Spa &amp; hammam traditionnel</h3><p class="small text-muted-2 mb-0">Rituels ancestraux au savon noir et soins aux huiles essentielles.</p></div></div>
+                    <div class="feature"><div class="icon"><i class="bi bi-shield-check"></i></div><div><h3 class="h6 mb-1">Réservation sécurisée</h3><p class="small text-muted-2 mb-0">Annulation gratuite jusqu'à la veille de votre arrivée depuis votre espace client.</p></div></div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="row g-4">
+                    {% for service in services %}
+                        <div class="col-md-4 reveal">
+                            <div class="service-card">
+                                <div class="media">
+                                    {% if service.image %}<img src="{{ asset('uploads/services/' ~ service.image) }}" alt="{{ service.name }}" loading="lazy">{% endif %}
+                                    <span class="icon"><i class="bi {{ service.icon }}"></i></span>
+                                </div>
+                                <div class="card-body">
+                                    <h3 class="h6">{{ service.name }}</h3>
+                                    <p class="small text-muted-2 mb-2">{{ service.description|u.truncate(70, '…') }}</p>
+                                    <span class="fw-semibold">{{ m.price(service.price) }}</span> <span class="small text-muted-2">{{ service.pricingLabel }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if testimonials %}
+<section class="section bg-sand">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="eyebrow">Ils ont séjourné chez nous</span>
+            <h2 class="section-title">Ce que disent nos clients</h2>
+        </div>
+        <div class="row g-4">
+            {% for review in testimonials %}
+                <div class="col-md-4 reveal">
+                    <div class="testimonial">
+                        {{ m.stars(review.rating) }}
+                        <p class="my-3">{{ review.comment }}</p>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="avatar">{{ review.user.initials }}</span>
+                            <div>
+                                <div class="fw-semibold small">{{ review.user.firstName }} {{ review.user.lastName|first }}.</div>
+                                <div class="small text-muted-2">{{ review.room.name }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="section">
+    <div class="container">
+        <div class="cta-band reveal">
+            <div class="row align-items-center position-relative" style="z-index:1">
+                <div class="col-lg-8">
+                    <h2 class="mb-2">Prêt pour une parenthèse enchantée ?</h2>
+                    <p class="mb-lg-0 text-white-50">Créez votre compte en 30 secondes et suivez toutes vos réservations depuis votre espace personnel.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    {% if app.user %}
+                        <a href="{{ path('app_room_index') }}" class="btn btn-gold btn-lg">Réserver maintenant</a>
+                    {% else %}
+                        <a href="{{ path('app_register') }}" class="btn btn-gold btn-lg">Créer mon compte</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

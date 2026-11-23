@@ -1,0 +1,19 @@
+{% import '_partials/_macros.html.twig' as m %}
+<a href="{{ path('app_account_reservation_show', {reference: r.reference}) }}" class="resa-card text-reset text-decoration-none mb-3">
+    {{ m.room_image(r.room, '') }}
+    <div class="flex-grow-1">
+        <div class="d-flex justify-content-between flex-wrap gap-2">
+            <div>
+                <div class="small text-muted-2">{{ r.reference }}</div>
+                <div class="fw-semibold">{{ r.room.name }}</div>
+            </div>
+            {{ m.status(r) }}
+        </div>
+        <div class="small text-muted-2 mt-1 d-flex flex-wrap gap-3">
+            <span><i class="bi bi-calendar-event me-1"></i>{{ r.checkIn|format_date('medium', locale: 'fr') }} → {{ r.checkOut|format_date('medium', locale: 'fr') }}</span>
+            <span><i class="bi bi-moon me-1"></i>{{ r.nights }} nuit{{ r.nights > 1 ? 's' }}</span>
+            <span><i class="bi bi-people me-1"></i>{{ r.guests }}</span>
+        </div>
+    </div>
+    <div class="fw-bold text-nowrap">{{ m.price(r.totalPrice) }}</div>
+</a>

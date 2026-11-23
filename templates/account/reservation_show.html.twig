@@ -1,0 +1,50 @@
+{% extends 'account/_layout.html.twig' %}
+{% import '_partials/_macros.html.twig' as m %}
+
+{% block title %}Réservation {{ reservation.reference }}{% endblock %}
+
+{% block account_content %}
+<a href="{{ path('app_account_reservations') }}" class="small text-decoration-none d-inline-block mb-3"><i class="bi bi-arrow-left"></i> Mes réservations</a>
+<div class="panel">
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+        <div>
+            <div class="small text-muted-2">Réservation</div>
+            <h2 class="h3 mb-1">{{ reservation.reference }}</h2>
+            <div class="small text-muted-2">Effectuée le {{ reservation.createdAt|format_datetime('long', 'short', locale: 'fr') }}</div>
+        </div>
+        <div>{{ m.status(reservation) }}</div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-5">
+            <div class="rounded-4 overflow-hidden" style="aspect-ratio:4/3">{{ m.room_image(reservation.room, 'w-100 h-100 object-fit-cover') }}</div>
+        </div>
+        <div class="col-md-7">
+            <span class="small text-gold fw-semibold">{{ reservation.room.category.name }}</span>
+            <h3 class="h4"><a class="text-reset" href="{{ path('app_room_show', {slug: reservation.room.slug}) }}">{{ reservation.room.name }}</a></h3>
+            <div class="row g-2 my-3">
+                <div class="col-6"><div class="stat-mini py-2"><span>Arrivée</span><div class="fw-semibold">{{ reservation.checkIn|format_date('full', locale: 'fr') }}</div></div></div>
+                <div class="col-6"><div class="stat-mini py-2"><span>Départ</span><div class="fw-semibold">{{ reservation.checkOut|format_date('full', locale: 'fr') }}</div></div></div>
+            </div>
+            <p class="mb-1"><i class="bi bi-moon text-gold me-2"></i>{{ reservation.nights }} nuit(s) · <i class="bi bi-people text-gold mx-2"></i>{{ reservation.guests }} voyageur(s)</p>
+            {% if reservation.specialRequest %}<p class="fst-italic text-muted-2">« {{ reservation.specialRequest }} »</p>{% endif %}
+        </div>
+    </div>
+
+    <hr class="my-4">
+    <h3 class="h6">Détail du prix</h3>
+    <div class="summary-line"><span>{{ reservation.room.name }} × {{ reservation.nights }} nuit(s)</span><span>{{ m.price(reservation.room.pricePerNight * reservation.nights) }}</span></div>
+    {% for extra in reservation.extras %}
+        <div class="summary-line"><span><i class="bi {{ extra.icon }} me-1"></i>{{ extra.name }} <small>({{ extra.pricingLabel }})</small></span><span>{{ m.price(extra.computePrice(reservation.nights, reservation.guests)) }}</span></div>
+    {% endfor %}
+    <div class="summary-total"><span>Total</span><span>{{ m.price(reservation.totalPrice) }}</span></div>
+
+    {% if is_granted('RESERVATION_CANCEL', reservation) %}
+        <form method="post" action="{{ path('app_account_reservation_cancel', {reference: reservation.reference}) }}" class="mt-4" data-confirm="Annuler définitivement cette réservation ?">
+            <input type="hidden" name="_token" value="{{ csrf_token('cancel-' ~ reservation.reference) }}">
+            <button class="btn btn-outline-danger"><i class="bi bi-x-circle me-1"></i>Annuler la réservation</button>
+            <span class="small text-muted-2 ms-2">Annulation gratuite jusqu'à la veille de l'arrivée.</span>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

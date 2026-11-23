@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+{% import '_partials/_macros.html.twig' as m %}
+
+{% block title %}Mon panier{% endblock %}
+
+{% block body %}
+<header class="page-header">
+    <div class="container position-relative">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li><li class="breadcrumb-item active">Panier</li></ol></nav>
+        <h1>Mon panier</h1>
+        <p class="text-white-50 mb-0">Vérifiez vos séjours avant de confirmer votre réservation.</p>
+    </div>
+</header>
+
+<section class="section-sm bg-sand">
+    <div class="container">
+        {% if lines is empty %}
+            <div class="panel empty-state">
+                <i class="bi bi-bag"></i>
+                <h2 class="h4 mt-3">Votre panier est vide</h2>
+                <p class="text-muted-2">Parcourez nos chambres et ajoutez un séjour à votre panier.</p>
+                <a href="{{ path('app_room_index') }}" class="btn btn-gold">Découvrir les chambres</a>
+            </div>
+        {% else %}
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="panel">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h2 class="h5 mb-0">{{ lines|length }} séjour{{ lines|length > 1 ? 's' }}</h2>
+                            <form method="post" action="{{ path('app_cart_clear') }}" data-confirm="Vider le panier ?">
+                                <input type="hidden" name="_token" value="{{ csrf_token('cart-clear') }}">
+                                <button class="btn btn-link btn-sm text-danger p-0"><i class="bi bi-trash me-1"></i>Vider</button>
+                            </form>
+                        </div>
+                        {% for line in lines %}
+                            <div class="cart-item">
+                                {{ m.room_image(line.room, '') }}
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between gap-2">
+                                        <div>
+                                            <span class="small text-gold fw-semibold">{{ line.room.category.name }}</span>
+                                            <h3 class="h5 mb-1"><a href="{{ path('app_room_show', {slug: line.room.slug}) }}" class="text-reset text-decoration-none">{{ line.room.name }}</a></h3>
+                                        </div>
+                                        <form method="post" action="{{ path('app_cart_remove', {key: line.key}) }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('cart-remove') }}">
+                                            <button class="btn btn-sm btn-light rounded-circle" aria-label="Retirer"><i class="bi bi-x-lg"></i></button>
+                                        </form>
+                                    </div>
+                                    <div class="small text-muted-2 d-flex flex-wrap gap-3 mb-2">
+                                        <span><i class="bi bi-calendar-event me-1"></i>{{ line.checkIn|format_date('medium', locale: 'fr') }} → {{ line.checkOut|format_date('medium', locale: 'fr') }}</span>
+                                        <span><i class="bi bi-moon me-1"></i>{{ line.quote.nights }} nuit{{ line.quote.nights > 1 ? 's' }}</span>
+                                        <span><i class="bi bi-people me-1"></i>{{ line.guests }} voyageur{{ line.guests > 1 ? 's' }}</span>
+                                    </div>
+                                    {% if line.quote.extras %}
+                                        <div class="small mb-2">
+                                            {% for e in line.quote.extras %}
+                                                <span class="badge rounded-pill text-bg-light border me-1"><i class="bi {{ e.service.icon }} me-1"></i>{{ e.service.name }} · {{ m.price(e.price) }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    {% if line.request %}<div class="small fst-italic text-muted-2 mb-2">« {{ line.request }} »</div>{% endif %}
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        {% if line.available %}
+                                            <span class="small text-success"><i class="bi bi-check-circle me-1"></i>Disponible</span>
+                                        {% else %}
+                                            <span class="small text-danger"><i class="bi bi-x-circle me-1"></i>Plus disponible</span>
+                                        {% endif %}
+                                        <span class="price fs-5">{{ m.price(line.quote.total) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="panel position-sticky" style="top:100px">
+                        <h2 class="h5 mb-3">Récapitulatif</h2>
+                        {% for line in lines %}
+                            <div class="summary-line"><span>{{ line.room.name|u.truncate(24, '…') }}</span><span>{{ m.price(line.quote.total) }}</span></div>
+                        {% endfor %}
+                        <div class="summary-total"><span>Total</span><span>{{ m.price(total) }}</span></div>
+                        <p class="small text-muted-2 mt-2">Taxes de séjour incluses. Paiement à l'hôtel.</p>
+                        {% if app.user %}
+                            <form method="post" action="{{ path('app_cart_checkout') }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('cart-checkout') }}">
+                                <button class="btn btn-gold w-100 py-3"><i class="bi bi-check2-circle me-2"></i>Confirmer la réservation</button>
+                            </form>
+                        {% else %}
+                            <a href="{{ path('app_login', {_target_path: path('app_cart')}) }}" class="btn btn-navy w-100 py-3">Se connecter pour réserver</a>
+                            <p class="small text-center mt-2 mb-0">Pas de compte ? <a href="{{ path('app_register') }}">Inscrivez-vous</a></p>
+                        {% endif %}
+                        <a href="{{ path('app_room_index') }}" class="btn btn-link w-100 mt-2">Continuer mes recherches</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,7 @@
+{# Suppression via POST + jeton CSRF propre à l'entité (jamais via un simple lien GET) #}
+<form method="post" action="{{ action }}" class="d-inline" data-confirm="{{ message ?? 'Supprimer définitivement cet élément ?' }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
+    <button class="btn {{ big is defined ? 'btn-outline-danger' : 'btn-light btn-icon text-danger' }}" title="Supprimer" aria-label="Supprimer">
+        <i class="bi bi-trash"></i>{% if big is defined %} Supprimer{% endif %}
+    </button>
+</form>

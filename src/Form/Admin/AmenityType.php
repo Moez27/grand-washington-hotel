@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Form\Admin;
+
+use App\Entity\Amenity;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class AmenityType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('name', TextType::class, ['label' => 'Nom'])
+            ->add('icon', TextType::class, ['label' => 'Icône Bootstrap', 'help' => 'Ex. bi-wifi, bi-snow, bi-tv', 'attr' => ['data-icon-input' => '']]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(['data_class' => Amenity::class]);
+    }
+}

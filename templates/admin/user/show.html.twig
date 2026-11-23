@@ -1,0 +1,65 @@
+{% extends 'admin/base.html.twig' %}
+{% import '_partials/_macros.html.twig' as m %}
+
+{% block title %}{{ user.fullName }}{% endblock %}
+
+{% block body %}
+<a href="{{ path('admin_user_index') }}" class="small text-decoration-none d-inline-block mb-2"><i class="bi bi-arrow-left"></i> Clients</a>
+<div class="row g-4">
+    <div class="col-xl-4">
+        <div class="card-x">
+            <div class="card-x-body text-center">
+                <div class="mx-auto mb-3 d-grid" style="width:84px;height:84px;border-radius:50%;place-items:center;background:var(--gold-soft);color:var(--gold-2);font-weight:700;font-size:1.8rem">{{ user.initials }}</div>
+                <h1 class="h4">{{ user.fullName }}</h1>
+                <div class="mb-2">
+                    {% if user.admin %}<span class="badge text-bg-dark">Administrateur</span>{% else %}<span class="badge text-bg-light border">Client</span>{% endif %}
+                    {% if user.blocked %}<span class="badge text-bg-danger">Suspendu</span>{% else %}<span class="badge text-bg-success">Actif</span>{% endif %}
+                </div>
+                <div class="small"><i class="bi bi-envelope me-1"></i>{{ user.email }}</div>
+                <div class="small"><i class="bi bi-telephone me-1"></i>{{ user.phone ?: '—' }}</div>
+                <div class="small text-muted mt-1">Inscrit le {{ user.createdAt|format_date('long', locale: 'fr') }}</div>
+                <hr>
+                <div class="row text-center">
+                    <div class="col"><div class="fw-bold fs-5">{{ user.reservations|length }}</div><div class="small text-muted">réservations</div></div>
+                    <div class="col"><div class="fw-bold fs-5">{{ m.price(user.totalSpent) }}</div><div class="small text-muted">dépensés</div></div>
+                    <div class="col"><div class="fw-bold fs-5">{{ user.reviews|length }}</div><div class="small text-muted">avis</div></div>
+                </div>
+                <hr>
+                <div class="d-flex gap-2 justify-content-center flex-wrap">
+                    <a href="{{ path('admin_user_edit', {id: user.id}) }}" class="btn btn-gold"><i class="bi bi-pencil me-1"></i>Modifier</a>
+                    {% if user != app.user %}
+                        <form method="post" action="{{ path('admin_user_toggle_block', {id: user.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('block' ~ user.id) }}">
+                            <button class="btn {{ user.blocked ? 'btn-outline-success' : 'btn-outline-warning' }}"><i class="bi bi-{{ user.blocked ? 'unlock' : 'lock' }} me-1"></i>{{ user.blocked ? 'Réactiver' : 'Suspendre' }}</button>
+                        </form>
+                        {% include 'admin/_delete_form.html.twig' with {action: path('admin_user_delete', {id: user.id}), id: user.id, big: true, message: 'Supprimer ce compte ainsi que ses réservations et avis ?'} %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-8">
+        <div class="card-x">
+            <div class="card-x-header"><h2>Historique des réservations</h2><a href="{{ path('admin_reservation_new') }}" class="btn btn-sm btn-light"><i class="bi bi-plus"></i> Réservation</a></div>
+            <div class="table-responsive">
+                <table class="table table-x">
+                    <thead><tr><th>Réf.</th><th>Chambre</th><th>Séjour</th><th>Montant</th><th>Statut</th></tr></thead>
+                    <tbody>
+                    {% for r in user.reservations %}
+                        <tr>
+                            <td><a href="{{ path('admin_reservation_show', {id: r.id}) }}">{{ r.reference }}</a></td>
+                            <td>{{ r.room.name }}</td>
+                            <td class="text-nowrap">{{ r.checkIn|date('d/m/y') }} → {{ r.checkOut|date('d/m/y') }}</td>
+                            <td>{{ m.price(r.totalPrice) }}</td>
+                            <td>{{ m.status(r) }}</td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="5" class="text-center text-muted py-4">Aucune réservation.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

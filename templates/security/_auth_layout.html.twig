@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block body %}
+<div class="auth-wrap">
+    <div class="auth-side">
+        <div class="hero-arches" aria-hidden="true"><span></span><span></span><span></span></div>
+        <a class="navbar-brand d-flex align-items-center gap-2 text-white fs-4 text-decoration-none position-relative" href="{{ path('app_home') }}">
+            <span class="brand-mark"><i class="bi bi-music-note-beamed"></i></span> Symphonie
+        </a>
+        <div class="position-relative">
+            <h2 class="display-6 mb-3">{% block side_title %}{% endblock %}</h2>
+            <p class="text-white-50">{% block side_text %}{% endblock %}</p>
+        </div>
+        <div class="small text-white-50 position-relative"><i class="bi bi-shield-lock text-gold me-1"></i>Connexion chiffrée, mots de passe hachés (bcrypt/argon2), protection anti brute-force.</div>
+    </div>
+    <div class="auth-form">
+        <div class="panel">
+            {% block form %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

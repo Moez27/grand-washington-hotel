@@ -1,0 +1,57 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+<a href="{{ back_path }}" class="small text-decoration-none d-inline-block mb-2"><i class="bi bi-arrow-left"></i> Retour à la liste</a>
+{% include 'admin/_page_header.html.twig' %}
+
+<div class="row g-4">
+    <div class="col-xl-{{ form.imageFile is defined ? '8' : '9' }}">
+        <div class="card-x">
+            <div class="card-x-body">
+                {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+                    {{ form_errors(form) }}
+                    <div class="row gx-4">
+                        {% for child in form %}
+                            {% if child.vars.name not in ['_token', 'imageFile', 'isActive', 'isFeatured', 'isBlocked'] %}
+                                {% set p = child.vars.block_prefixes %}
+                                {% set full = 'textarea' in p or 'repeated' in p or (child.vars.expanded ?? false) %}
+                                <div class="{{ full ? 'col-12' : 'col-md-6' }}">
+                                    {% if child.vars.expanded ?? false %}
+                                        {{ form_row(child, {attr: {class: 'checks-grid'}}) }}
+                                    {% else %}
+                                        {{ form_row(child) }}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        {% for name in ['isActive', 'isFeatured', 'isBlocked'] %}
+                            {% if attribute(form, name) is defined %}
+                                <div class="col-md-6">{{ form_row(attribute(form, name), {label_attr: {class: 'checkbox-switch'}}) }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% if form.imageFile is defined %}<div class="p-3 rounded-3 bg-light">{{ form_row(form.imageFile) }}</div>{% endif %}
+                    <div class="d-flex gap-2 mt-3 pt-3 border-top">
+                        <button class="btn btn-gold"><i class="bi bi-check2 me-1"></i>{{ button_label ?? 'Enregistrer' }}</button>
+                        <a href="{{ back_path }}" class="btn btn-light">Annuler</a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    {% if form.imageFile is defined %}
+        <div class="col-xl-4">
+            <div class="card-x">
+                <div class="card-x-header"><h2>Image</h2></div>
+                <div class="card-x-body">
+                    {% set previewId = form.imageFile.vars.attr['data-preview'] %}
+                    <img id="{{ previewId }}" src="{{ current_image ?? false ? asset(current_image) : '' }}" alt="Aperçu" class="preview-img w-100 mb-3 {{ current_image is defined and current_image ? '' : 'd-none' }}">
+                    <p class="small text-muted mb-0"><i class="bi bi-shield-check text-success me-1"></i>Le type réel du fichier est vérifié (MIME), le nom est régénéré aléatoirement et seules les images JPG/PNG/WEBP ≤ 3 Mo sont acceptées.</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

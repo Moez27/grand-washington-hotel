@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{% set route = app.request.attributes.get('_route') %}
+<header class="page-header">
+    <div class="container position-relative d-flex align-items-center gap-3">
+        <span class="avatar avatar-lg">{{ app.user.initials }}</span>
+        <div>
+            <span class="eyebrow mb-1">Espace client</span>
+            <h1 class="mb-0">Bonjour {{ app.user.firstName }}</h1>
+        </div>
+    </div>
+</header>
+<section class="section-sm bg-sand">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3">
+                <div class="panel p-3 account-nav">
+                    <div class="list-group">
+                        <a href="{{ path('app_account') }}" class="list-group-item list-group-item-action {{ route == 'app_account' ? 'active' }}"><i class="bi bi-grid"></i>Tableau de bord</a>
+                        <a href="{{ path('app_account_reservations') }}" class="list-group-item list-group-item-action {{ route starts with 'app_account_reservation' ? 'active' }}"><i class="bi bi-calendar2-check"></i>Mes réservations</a>
+                        <a href="{{ path('app_account_profile') }}" class="list-group-item list-group-item-action {{ route == 'app_account_profile' ? 'active' }}"><i class="bi bi-person-gear"></i>Profil &amp; sécurité</a>
+                        <a href="{{ path('app_cart') }}" class="list-group-item list-group-item-action"><i class="bi bi-bag"></i>Mon panier {% if cart_count() %}<span class="badge text-bg-warning rounded-pill ms-1">{{ cart_count() }}</span>{% endif %}</a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('admin_dashboard') }}" class="list-group-item list-group-item-action"><i class="bi bi-speedometer2"></i>Administration</a>
+                        {% endif %}
+                        <a href="{{ logout_path() }}" class="list-group-item list-group-item-action text-danger"><i class="bi bi-box-arrow-right text-danger"></i>Déconnexion</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                {% block account_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

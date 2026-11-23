@@ -1,0 +1,30 @@
+{% extends 'admin/base.html.twig' %}
+{% import '_partials/_macros.html.twig' as m %}
+
+{% block title %}Services{% endblock %}
+
+{% block body %}
+{% include 'admin/_page_header.html.twig' with {title: 'Services & Spa', subtitle: 'Prestations additionnelles proposées lors de la réservation.', new_path: path('admin_service_new'), new_label: 'Nouveau service'} %}
+<div class="card-x">
+    <div class="table-responsive">
+        <table class="table table-x">
+            <thead><tr><th></th><th>Service</th><th>Prix</th><th>Tarification</th><th>Statut</th><th class="text-end">Actions</th></tr></thead>
+            <tbody>
+            {% for s in services %}
+                <tr>
+                    <td>{% if s.image %}<img class="thumb" src="{{ asset('uploads/services/' ~ s.image) }}" alt="">{% else %}<span class="icon-preview"><i class="bi {{ s.icon }}"></i></span>{% endif %}</td>
+                    <td><span class="fw-semibold"><i class="bi {{ s.icon }} text-muted me-1"></i>{{ s.name }}</span><div class="small text-muted">{{ s.description|u.truncate(80, '…') }}</div></td>
+                    <td class="fw-semibold">{{ m.price(s.price) }}</td>
+                    <td>{{ s.pricingLabel }}</td>
+                    <td><span class="badge rounded-pill {{ s.active ? 'text-bg-success' : 'text-bg-secondary' }}">{{ s.active ? 'Actif' : 'Inactif' }}</span></td>
+                    <td class="text-end text-nowrap">
+                        <a href="{{ path('admin_service_edit', {id: s.id}) }}" class="btn btn-light btn-icon"><i class="bi bi-pencil"></i></a>
+                        {% include 'admin/_delete_form.html.twig' with {action: path('admin_service_delete', {id: s.id}), id: s.id} %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

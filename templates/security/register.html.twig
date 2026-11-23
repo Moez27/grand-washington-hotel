@@ -1,0 +1,26 @@
+{% extends 'security/_auth_layout.html.twig' %}
+
+{% block title %}Créer un compte{% endblock %}
+{% block side_title %}Votre escapade commence ici.{% endblock %}
+{% block side_text %}Créez votre compte pour réserver en quelques clics, suivre vos séjours et bénéficier de l'annulation gratuite.{% endblock %}
+
+{% block form %}
+    <a href="{{ path('app_home') }}" class="small text-decoration-none"><i class="bi bi-arrow-left"></i> Retour au site</a>
+    <h1 class="h2 mt-3 mb-1">Créer un compte</h1>
+    <p class="text-muted-2 mb-4">Quelques informations et c'est parti.</p>
+
+    {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+        <div class="row g-2">
+            <div class="col-6">{{ form_row(form.firstName) }}</div>
+            <div class="col-6">{{ form_row(form.lastName) }}</div>
+        </div>
+        {{ form_row(form.email) }}
+        {{ form_row(form.phone) }}
+        {{ form_row(form.plainPassword.first) }}
+        {{ form_row(form.plainPassword.second) }}
+        {{ form_errors(form.plainPassword) }}
+        {{ form_row(form.agreeTerms) }}
+        <button class="btn btn-gold w-100 py-3 mt-2">Créer mon compte</button>
+    {{ form_end(form) }}
+    <p class="text-center mt-4 mb-0 small">Déjà inscrit ? <a href="{{ path('app_login') }}" class="fw-semibold">Se connecter</a></p>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% macro stars(rating, size) %}
+    <span class="stars{{ size ? ' ' ~ size }}" aria-label="{{ rating }} sur 5">
+        {%- for i in 1..5 -%}
+            {%- if rating >= i -%}<i class="bi bi-star-fill"></i>
+            {%- elseif rating >= i - 0.5 -%}<i class="bi bi-star-half"></i>
+            {%- else -%}<i class="bi bi-star"></i>{%- endif -%}
+        {%- endfor -%}
+    </span>
+{% endmacro %}
+
+{% macro status(reservation) %}
+    <span class="status-badge status-{{ reservation.status }}">{{ reservation.statusLabel }}</span>
+{% endmacro %}
+
+{% macro price(amount) %}{{ amount|number_format(0, ',', ' ') }} DT{% endmacro %}
+
+{% macro room_image(room, class) %}
+    {% if room.image %}
+        <img src="{{ asset('uploads/rooms/' ~ room.image) }}" alt="{{ room.name }}" class="{{ class }}" loading="lazy">
+    {% else %}
+        <div class="{{ class }} d-grid place-items-center bg-secondary-subtle"><i class="bi bi-image text-muted fs-1"></i></div>
+    {% endif %}
+{% endmacro %}

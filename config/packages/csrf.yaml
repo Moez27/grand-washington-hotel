@@ -1,0 +1,7 @@
+# Protection CSRF "classique" (jeton stocké en session) pour tous les formulaires,
+# le login et le logout.
+framework:
+    form:
+        csrf_protection:
+            enabled: true
+    csrf_protection: true

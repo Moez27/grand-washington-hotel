@@ -1,0 +1,16 @@
+parameters:
+    rooms_upload_dir: '%kernel.project_dir%/public/uploads/rooms'
+    services_upload_dir: '%kernel.project_dir%/public/uploads/services'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Model/'
+            - '../src/Kernel.php'

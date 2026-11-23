@@ -1,0 +1,70 @@
+{% extends 'admin/base.html.twig' %}
+{% import '_partials/_macros.html.twig' as m %}
+
+{% block title %}{{ reservation.reference }}{% endblock %}
+
+{% block body %}
+{% set r = reservation %}
+<a href="{{ path('admin_reservation_index') }}" class="small text-decoration-none d-inline-block mb-2"><i class="bi bi-arrow-left"></i> Réservations</a>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="page-title">{{ r.reference }} {{ m.status(r) }}</h1>
+        <div class="page-sub">Créée le {{ r.createdAt|format_datetime('long', 'short', locale: 'fr') }}</div>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ path('admin_reservation_edit', {id: r.id}) }}" class="btn btn-gold"><i class="bi bi-pencil me-1"></i>Modifier</a>
+        {% include 'admin/_delete_form.html.twig' with {action: path('admin_reservation_delete', {id: r.id}), id: r.id, big: true} %}
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-xl-8">
+        <div class="card-x mb-4">
+            <div class="card-x-header"><h2>Séjour</h2></div>
+            <div class="card-x-body">
+                <div class="d-flex gap-3 mb-3">
+                    {% if r.room.image %}<img src="{{ asset('uploads/rooms/' ~ r.room.image) }}" class="rounded-3" style="width:140px;height:96px;object-fit:cover" alt="">{% endif %}
+                    <div>
+                        <div class="small text-muted">{{ r.room.category.name }}</div>
+                        <a href="{{ path('admin_room_show', {id: r.room.id}) }}" class="h5 text-reset d-block mb-1" style="font-family:Inter">{{ r.room.name }}</a>
+                        <div class="small"><i class="bi bi-calendar-event me-1"></i>{{ r.checkIn|format_date('full', locale: 'fr') }} → {{ r.checkOut|format_date('full', locale: 'fr') }}</div>
+                        <div class="small"><i class="bi bi-moon me-1"></i>{{ r.nights }} nuit(s) · <i class="bi bi-people me-1"></i>{{ r.guests }} voyageur(s)</div>
+                    </div>
+                </div>
+                {% if r.specialRequest %}<div class="alert alert-light border small mb-3"><i class="bi bi-chat-left-quote me-1"></i>{{ r.specialRequest }}</div>{% endif %}
+                <table class="table table-sm mb-0">
+                    <tr><td>{{ r.room.name }} — {{ m.price(r.room.pricePerNight) }} × {{ r.nights }}</td><td class="text-end">{{ m.price(r.room.pricePerNight * r.nights) }}</td></tr>
+                    {% for e in r.extras %}<tr><td><i class="bi {{ e.icon }} me-1"></i>{{ e.name }} <span class="text-muted small">({{ e.pricingLabel }})</span></td><td class="text-end">{{ m.price(e.computePrice(r.nights, r.guests)) }}</td></tr>{% endfor %}
+                    <tr class="fw-bold"><td>Total facturé</td><td class="text-end fs-5">{{ m.price(r.totalPrice) }}</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="card-x mb-4">
+            <div class="card-x-header"><h2>Changer le statut</h2></div>
+            <div class="card-x-body d-grid gap-2">
+                {% for key, label in constant('App\\Entity\\Reservation::STATUSES') %}
+                    <form method="post" action="{{ path('admin_reservation_status', {id: r.id}) }}" class="d-grid">
+                        <input type="hidden" name="_token" value="{{ csrf_token('status' ~ r.id) }}">
+                        <input type="hidden" name="status" value="{{ key }}">
+                        <input type="hidden" name="from" value="show">
+                        <button class="btn {{ r.status == key ? 'btn-dark' : 'btn-outline-secondary' }}" {{ r.status == key ? 'disabled' }}>
+                            <span class="status-badge status-{{ key }} me-1">●</span> {{ label }}
+                        </button>
+                    </form>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card-x">
+            <div class="card-x-header"><h2>Client</h2></div>
+            <div class="card-x-body">
+                <div class="fw-semibold"><a href="{{ path('admin_user_show', {id: r.user.id}) }}" class="text-reset">{{ r.user.fullName }}</a></div>
+                <div class="small"><i class="bi bi-envelope me-1"></i>{{ r.user.email }}</div>
+                <div class="small"><i class="bi bi-telephone me-1"></i>{{ r.user.phone ?: '—' }}</div>
+                <div class="small text-muted mt-2">{{ r.user.reservations|length }} réservation(s) · {{ m.price(r.user.totalSpent) }} dépensés</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

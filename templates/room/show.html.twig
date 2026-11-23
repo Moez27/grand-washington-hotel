@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+{% import '_partials/_macros.html.twig' as m %}
+
+{% block title %}{{ room.name }}{% endblock %}
+{% block meta_description %}{{ room.shortDescription }}{% endblock %}
+
+{% block body %}
+<header class="page-header pb-5">
+    <div class="container position-relative">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_room_index') }}">Chambres</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('app_room_index', {category: room.category.slug}) }}">{{ room.category.name }}</a></li>
+            <li class="breadcrumb-item active">{{ room.name }}</li>
+        </ol></nav>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
+            <div>
+                <span class="badge rounded-pill text-bg-light mb-2"><i class="bi {{ room.category.icon }} me-1"></i>{{ room.category.name }}</span>
+                <h1 class="mb-1">{{ room.name }}</h1>
+                <div class="text-white-50">
+                    {% if room.averageRating %}{{ m.stars(room.averageRating) }} <span class="ms-1">{{ room.averageRating }}/5 · {{ room.approvedReviews|length }} avis</span>{% else %}Nouvelle chambre{% endif %}
+                </div>
+            </div>
+            <div class="text-md-end"><span class="price text-white fs-2">{{ m.price(room.pricePerNight) }}</span> <span class="text-white-50">/ nuit</span></div>
+        </div>
+    </div>
+</header>
+
+<section class="section-sm">
+    <div class="container">
+        {% if not room.active %}<div class="alert alert-warning">Cette chambre est masquée aux clients (aperçu administrateur).</div>{% endif %}
+        <div class="row g-5">
+            <div class="col-lg-7 col-xl-8">
+                <div class="room-hero-img mb-4">{% if room.image %}<img src="{{ asset('uploads/rooms/' ~ room.image) }}" alt="{{ room.name }}">{% endif %}</div>
+
+                <div class="row g-3 mb-5">
+                    <div class="col-6 col-md-3"><div class="spec"><i class="bi bi-people"></i><strong>{{ room.capacity }}</strong><span>personne{{ room.capacity > 1 ? 's' }}</span></div></div>
+                    <div class="col-6 col-md-3"><div class="spec"><i class="bi bi-arrows-angle-expand"></i><strong>{{ room.size }} m²</strong><span>surface</span></div></div>
+                    <div class="col-6 col-md-3"><div class="spec"><i class="bi bi-moon-stars"></i><strong class="small">{{ room.bedType }}</strong><span>literie</span></div></div>
+                    <div class="col-6 col-md-3"><div class="spec"><i class="bi bi-door-open"></i><strong>14h / 12h</strong><span>arrivée / départ</span></div></div>
+                </div>
+
+                <h2 class="h3 mb-3">À propos de cette chambre</h2>
+                <p class="text-muted-2 lh-lg">{{ room.description|nl2br }}</p>
+
+                <h2 class="h4 mt-5 mb-3">Équipements</h2>
+                <div>
+                    {% for amenity in room.amenities %}
+                        <span class="amenity-pill"><i class="bi {{ amenity.icon }}"></i>{{ amenity.name }}</span>
+                    {% else %}
+                        <p class="text-muted-2">Aucun équipement renseigné.</p>
+                    {% endfor %}
+                </div>
+
+                {% if booked %}
+                    <h2 class="h4 mt-5 mb-3">Prochaines indisponibilités</h2>
+                    <ul class="booked-dates list-unstyled row row-cols-2 row-cols-md-3 g-2">
+                        {% for b in booked %}
+                            <li class="col"><i class="bi bi-calendar-x text-danger me-1"></i>{{ b.checkIn|date('d/m') }} → {{ b.checkOut|date('d/m/Y') }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <h2 class="h4 mt-5 mb-3" id="avis">Avis clients</h2>
+                {% if reviewForm %}
+                    <div class="panel mb-4 bg-sand shadow-none">
+                        <h3 class="h6"><i class="bi bi-pencil-square text-gold me-2"></i>Vous avez séjourné ici ? Donnez votre avis</h3>
+                        {{ form_start(reviewForm) }}
+                            <div class="row g-3">
+                                <div class="col-md-4">{{ form_row(reviewForm.rating) }}</div>
+                                <div class="col-md-8">{{ form_row(reviewForm.comment) }}</div>
+                            </div>
+                            <button class="btn btn-gold btn-sm">Publier mon avis</button>
+                        {{ form_end(reviewForm) }}
+                    </div>
+                {% endif %}
+                {% for review in room.approvedReviews|slice(0, 6) %}
+                    <div class="review">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex gap-2 align-items-center">
+                                <span class="avatar">{{ review.user.initials }}</span>
+                                <div><div class="fw-semibold">{{ review.user.firstName }} {{ review.user.lastName|first }}.</div><div class="small text-muted-2">{{ review.createdAt|format_date('long', locale: 'fr') }}</div></div>
+                            </div>
+                            {{ m.stars(review.rating) }}
+                        </div>
+                        {# Échappement automatique Twig : un avis contenant du HTML/JS est affiché comme du texte (anti-XSS) #}
+                        <p class="mt-2 mb-0">{{ review.comment }}</p>
+                    </div>
+                {% else %}
+                    <p class="text-muted-2">Aucun avis pour le moment.</p>
+                {% endfor %}
+            </div>
+
+            <div class="col-lg-5 col-xl-4">
+                <div class="booking-card" data-booking data-price="{{ room.pricePerNight }}">
+                    <div class="d-flex justify-content-between align-items-baseline mb-3">
+                        <div><span class="price">{{ m.price(room.pricePerNight) }}</span> <small class="text-muted-2">/ nuit</small></div>
+                        <span class="small text-success"><i class="bi bi-check-circle me-1"></i>Annulation gratuite</span>
+                    </div>
+                    {{ form_start(booking, {attr: {novalidate: 'novalidate'}}) }}
+                        <div class="row g-2">
+                            <div class="col-6">{{ form_row(booking.checkIn) }}</div>
+                            <div class="col-6">{{ form_row(booking.checkOut) }}</div>
+                        </div>
+                        {{ form_row(booking.guests, {help: 'Maximum ' ~ room.capacity ~ ' personne(s)'}) }}
+                        <div class="extras mb-2">
+                            {{ form_label(booking.extras) }}
+                            {% for child in booking.extras %}{{ form_widget(child) }}{% endfor %}
+                        </div>
+                        {{ form_row(booking.specialRequest) }}
+
+                        <div class="quote-box mb-3 d-none">
+                            <div class="summary-line"><span>Hébergement · <span data-q-nights></span></span><span data-q-room></span></div>
+                            <div class="summary-line"><span>Services</span><span data-q-extras></span></div>
+                            <div class="d-flex justify-content-between align-items-center mt-2"><strong>Total estimé</strong><span class="total" data-q-total></span></div>
+                        </div>
+                        <button class="btn btn-gold w-100 py-3"><i class="bi bi-bag-plus me-2"></i>Ajouter au panier</button>
+                        <p class="small text-muted-2 text-center mt-2 mb-0"><i class="bi bi-lock me-1"></i>Prix recalculé et disponibilité vérifiée côté serveur</p>
+                    {{ form_end(booking) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if similar %}
+<section class="section-sm bg-sand">
+    <div class="container">
+        <h2 class="section-title h3 mb-4">Dans la même catégorie</h2>
+        <div class="row g-4">
+            {% for room in similar %}
+                <div class="col-md-4">{% include '_partials/_room_card.html.twig' %}</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

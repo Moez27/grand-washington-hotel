@@ -1,0 +1,40 @@
+{% extends 'admin/base.html.twig' %}
+{% import '_partials/_macros.html.twig' as m %}
+
+{% block title %}Avis clients{% endblock %}
+
+{% block body %}
+{% include 'admin/_page_header.html.twig' with {title: 'Avis clients', subtitle: pendingCount ~ ' avis en attente de modération'} %}
+<div class="d-flex gap-2 mb-3">
+    <a href="{{ path('admin_review_index') }}" class="btn btn-sm {{ state is null ? 'btn-dark' : 'btn-light' }}">Tous</a>
+    <a href="{{ path('admin_review_index', {etat: 'pending'}) }}" class="btn btn-sm {{ state == 'pending' ? 'btn-dark' : 'btn-light' }}">En attente</a>
+    <a href="{{ path('admin_review_index', {etat: 'approved'}) }}" class="btn btn-sm {{ state == 'approved' ? 'btn-dark' : 'btn-light' }}">Publiés</a>
+</div>
+<div class="row g-3">
+    {% for review in reviews %}
+        <div class="col-md-6 col-xl-4">
+            <div class="card-x h-100 {{ review.approved ? '' : 'border-warning' }}">
+                <div class="card-x-body d-flex flex-column h-100">
+                    <div class="d-flex justify-content-between mb-2">
+                        {{ m.stars(review.rating) }}
+                        {% if review.approved %}<span class="badge rounded-pill text-bg-success">Publié</span>{% else %}<span class="badge rounded-pill text-bg-warning">En attente</span>{% endif %}
+                    </div>
+                    {# Contenu saisi par un client : affiché échappé (protection XSS) #}
+                    <p class="flex-grow-1">{{ review.comment }}</p>
+                    <div class="small text-muted mb-3"><strong class="text-body">{{ review.user.fullName }}</strong> · {{ review.room.name }} · {{ review.createdAt|date('d/m/Y') }}</div>
+                    <div class="d-flex gap-2">
+                        <form method="post" action="{{ path('admin_review_toggle', {id: review.id, etat: state}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('review' ~ review.id) }}">
+                            <button class="btn btn-sm {{ review.approved ? 'btn-outline-secondary' : 'btn-success' }}"><i class="bi bi-{{ review.approved ? 'eye-slash' : 'check2' }} me-1"></i>{{ review.approved ? 'Masquer' : 'Approuver' }}</button>
+                        </form>
+                        {% include 'admin/_delete_form.html.twig' with {action: path('admin_review_delete', {id: review.id}), id: review.id} %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="col-12"><div class="card-x card-x-body text-center text-muted py-5">Aucun avis.</div></div>
+    {% endfor %}
+</div>
+<div class="mt-4 d-flex justify-content-center">{{ knp_pagination_render(reviews) }}</div>
+{% endblock %}

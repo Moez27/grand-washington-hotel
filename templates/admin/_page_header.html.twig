@@ -1,0 +1,9 @@
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="page-title">{{ title }}</h1>
+        {% if subtitle is defined %}<div class="page-sub">{{ subtitle }}</div>{% endif %}
+    </div>
+    {% if new_path is defined %}
+        <a href="{{ new_path }}" class="btn btn-gold"><i class="bi bi-plus-lg me-1"></i>{{ new_label ?? 'Ajouter' }}</a>
+    {% endif %}
+</div>

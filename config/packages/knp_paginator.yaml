@@ -1,0 +1,12 @@
+knp_paginator:
+    page_range: 5
+    default_options:
+        page_name: page
+        distinct: true
+        sort_field_name: _sort
+        sort_direction_name: _dir
+        filter_field_name: _ff
+        filter_value_name: _fv
+    template:
+        pagination: '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig'
+        sortable: '@KnpPaginator/Pagination/sortable_link.html.twig'

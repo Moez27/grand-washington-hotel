@@ -1,0 +1,54 @@
+{% extends 'admin/base.html.twig' %}
+{% import '_partials/_macros.html.twig' as m %}
+
+{% block title %}Chambres{% endblock %}
+
+{% block body %}
+{% include 'admin/_page_header.html.twig' with {title: 'Chambres', subtitle: rooms.totalItemCount ~ ' chambre(s) au catalogue', new_path: path('admin_room_new'), new_label: 'Nouvelle chambre'} %}
+
+<div class="card-x">
+    <div class="card-x-header">
+        <form class="row g-2 filters flex-grow-1" method="get">
+            <div class="col-md-5"><input type="search" name="q" value="{{ q }}" class="form-control" placeholder="Rechercher une chambre…" maxlength="60"></div>
+            <div class="col-md-4">
+                <select name="categorie" class="form-select">
+                    <option value="">Toutes les catégories</option>
+                    {% for c in categories %}<option value="{{ c.id }}" {{ cat == c.id ? 'selected' }}>{{ c.name }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2"><button class="btn btn-dark flex-grow-1"><i class="bi bi-funnel"></i> Filtrer</button>{% if q or cat %}<a href="{{ path('admin_room_index') }}" class="btn btn-light"><i class="bi bi-x-lg"></i></a>{% endif %}</div>
+        </form>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-x">
+            <thead><tr><th></th><th>{{ knp_pagination_sortable(rooms, 'Nom', 'r.name') }}</th><th>Catégorie</th><th>{{ knp_pagination_sortable(rooms, 'Prix / nuit', 'r.pricePerNight') }}</th><th>{{ knp_pagination_sortable(rooms, 'Capacité', 'r.capacity') }}</th><th>Réservations</th><th>Statut</th><th class="text-end">Actions</th></tr></thead>
+            <tbody>
+            {% for room in rooms %}
+                <tr>
+                    <td>{% if room.image %}<img class="thumb" src="{{ asset('uploads/rooms/' ~ room.image) }}" alt="">{% endif %}</td>
+                    <td><a href="{{ path('admin_room_show', {id: room.id}) }}" class="fw-semibold text-reset">{{ room.name }}</a>{% if room.featured %} <i class="bi bi-award-fill text-warning" title="Mise en avant"></i>{% endif %}<div class="small text-muted">{{ room.size }} m² · {{ room.bedType }}</div></td>
+                    <td><i class="bi {{ room.category.icon }} text-muted me-1"></i>{{ room.category.name }}</td>
+                    <td class="fw-semibold">{{ m.price(room.pricePerNight) }}</td>
+                    <td><i class="bi bi-people text-muted me-1"></i>{{ room.capacity }}</td>
+                    <td>{{ room.reservations|length }}</td>
+                    <td>
+                        <form method="post" action="{{ path('admin_room_toggle', {id: room.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ room.id) }}">
+                            <button class="badge border-0 rounded-pill {{ room.active ? 'text-bg-success' : 'text-bg-secondary' }}" title="Cliquer pour changer">{{ room.active ? 'En ligne' : 'Masquée' }}</button>
+                        </form>
+                    </td>
+                    <td class="text-end text-nowrap">
+                        <a href="{{ path('app_room_show', {slug: room.slug}) }}" target="_blank" class="btn btn-light btn-icon" title="Voir sur le site"><i class="bi bi-eye"></i></a>
+                        <a href="{{ path('admin_room_edit', {id: room.id}) }}" class="btn btn-light btn-icon" title="Modifier"><i class="bi bi-pencil"></i></a>
+                        {% include 'admin/_delete_form.html.twig' with {action: path('admin_room_delete', {id: room.id}), id: room.id} %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="8" class="text-center text-muted py-5">Aucune chambre trouvée.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="p-3 d-flex justify-content-center">{{ knp_pagination_render(rooms) }}</div>
+</div>
+{% endblock %}

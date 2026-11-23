@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% set messages = {
+    403: ['Accès refusé', "Vous n'avez pas les droits nécessaires pour accéder à cette page.", 'bi-shield-lock'],
+    404: ['Page introuvable', "La page que vous cherchez n'existe pas ou a été déplacée.", 'bi-signpost-split'],
+    429: ['Trop de tentatives', 'Merci de patienter quelques instants avant de réessayer.', 'bi-hourglass-split'],
+} %}
+{% set info = messages[status_code] ?? ['Une erreur est survenue', 'Notre équipe a été prévenue. Merci de réessayer plus tard.', 'bi-exclamation-diamond'] %}
+
+{% block title %}{{ info[0] }}{% endblock %}
+
+{% block body %}
+<section class="page-header" style="min-height:70vh;display:flex;align-items:center">
+    <div class="container position-relative text-center">
+        <i class="bi {{ info[2] }} display-1 text-gold"></i>
+        <div class="display-1 fw-bold mt-2" style="font-family:'Playfair Display',serif">{{ status_code }}</div>
+        <h1 class="h2">{{ info[0] }}</h1>
+        <p class="text-white-50 mb-4">{{ info[1] }}</p>
+        <a href="{{ path('app_home') }}" class="btn btn-gold btn-lg">Retour à l'accueil</a>
+    </div>
+</section>
+{% endblock %}
