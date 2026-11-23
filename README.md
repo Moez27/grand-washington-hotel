@@ -2,7 +2,9 @@
 
 Projet du module **Développement d'applications sécurisées** — thème **Hôtel** (équipe de 2).
 
-**Étudiante 1 :** Erij Yacoubi — classe **ING-4-SSIR-B**
+**Université :** TEKUP — **Classe :** ING-4-SSIR-B — **Année universitaire :** 2026-2027
+
+**Réalisé par :** Erij Yacoubi et Zeineb Mamia Chaibi
 
 📄 Rapport de projet : [PDF](docs/Rapport-Grand-Washington-Hotel.pdf) · [Word](docs/Rapport-Grand-Washington-Hotel.docx)
 
@@ -125,7 +127,7 @@ Répartition proposée pour la soutenance :
 | Membre | Partie présentée |
 |---|---|
 | Erij Yacoubi | **Site client** : recherche, fiche chambre, panier, compte client, inscription/connexion, sécurité (CSRF, Voter, CSP) |
-| Membre 2 | **Back-office** : CRUD chambres/catégories/équipements/services, upload, réservations, clients, avis, statistiques |
+| Zeineb Mamia Chaibi | **Back-office** : CRUD chambres/catégories/équipements/services, upload, réservations, clients, avis, statistiques |
 
 ## 📁 Structure
 
